@@ -1,0 +1,423 @@
+/* --- 1. RESET & TAILWIND BRIDGE --- */
+.hidden { display: none !important; }
+.block { display: block !important; }
+.flex { display: flex !important; }
+
+:root {
+    --primary-green: #38a169;
+    --primary-price: #060807;
+    --primary-hover: #18d671;
+    --dark-blue: #2d3748;
+    --light-bg: #f9fafb;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --white: #ffffff;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --transition: all 0.2s ease-in-out;
+}
+
+* { box-sizing: border-box; }
+
+body { 
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+    margin: 0; 
+    background: var(--light-bg); 
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%; /* Fixes font scaling on mobile */
+}
+
+.container { 
+    max-width: 1100px; 
+    margin: 0 auto; 
+    padding: 0 1.5rem; 
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- 2. NAVIGATION --- */
+.shop-nav-dark {
+    background: var(--dark-blue);
+    color: var(--white);
+    padding: 0.8rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left, .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.logo {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: var(--primary-green);
+}
+
+/* --- 3. DROPDOWN LOGIC --- */
+.dropdown {
+    position: relative;
+    padding-bottom: 15px; 
+    margin-bottom: -15px;
+}
+
+.dropbtn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.8);
+    padding: 8px 0;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.dropbtn:hover { color: var(--primary-green); }
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: white;
+    min-width: 200px;
+    box-shadow: var(--shadow-md);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1001;
+}
+
+.dropdown:hover .dropdown-content { display: block; }
+
+.dropdown-content a {
+    color: var(--dark-blue) !important;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.dropdown-content a:hover {
+    background: #f4f7f6;
+    color: var(--primary-green) !important;
+}
+
+/* --- 4. CART BADGE --- */
+.cart-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.cart-badge {
+    background-color: var(--primary-green);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* --- 5. HERO & HEADERS --- */
+.hero-banner {
+    background: var(--primary-green);
+    color: var(--white);
+    padding: 60px 20px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* --- 6. PRODUCT GRID & CARDS --- */
+.product-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+    gap: 25px; 
+    margin: 2rem 0;
+}
+
+.product-card { 
+    background: var(--white); 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: var(--shadow-sm); 
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    min-height: 2.2em; 
+}
+
+.product-card .price {
+    margin-top: auto; 
+    color: var(--primary-price);
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.product-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: contain; 
+    margin-bottom: 15px;
+}
+
+/* --- 7. BUTTONS & UI --- */
+.btn {
+    display: block;
+    background: var(--primary-green);
+    color: var(--white);
+    text-decoration: none;
+    text-align: center;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.btn:hover { background: var(--primary-hover); }
+
+.btn-outline {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    background: transparent;
+    border: 1px solid var(--primary-green);
+    color: var(--primary-green);
+    padding: 10px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-outline:hover {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
+/* --- 8. PRODUCT DETAILS PAGE --- */
+.product-details-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 50px;
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    margin-top: 30px;
+}
+
+/* --- 9. SHOPPING CART PAGE --- */
+.cart-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.cart-table th {
+    background: #f8fafc;
+    text-align: left;
+    padding: 15px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.cart-table td {
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-item-info img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.cart-summary {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.total-row {
+    border-top: 2px solid #eee;
+    padding-top: 15px;
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--dark-blue);
+}
+
+.remove-btn {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* --- 10. AUTH & FORMS --- */
+.auth-container {
+    max-width: 380px;
+    margin: 60px auto;
+    padding: 40px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+}
+
+/* --- 11. RESPONSIVENESS (Mobile Fixed) --- */
+@media (max-width: 768px) {
+    .nav-container { flex-direction: column; gap: 15px; text-align: center; }
+    .nav-left, .nav-right { flex-direction: column; gap: 12px; }
+    .nav-links { flex-wrap: wrap; justify-content: center; }
+
+    .cart-wrapper { grid-template-columns: 1fr; }
+
+    /* MOBILE TABLE TO CARDS */
+    .cart-table thead { display: none; }
+    .cart-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #edf2f7;
+        border-radius: 12px;
+        padding: 10px;
+        background: #fff;
+    }
+
+    .cart-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        padding: 8px 10px !important;
+        font-size: 0.95rem;
+    }
+
+    /* Column Labels */
+    .cart-table td:nth-of-type(2):before { content: "Price:"; font-weight: bold; color: var(--text-muted); }
+    .cart-table td:nth-of-type(3):before { content: "Quantity:"; font-weight: bold; color: var(--text-muted); }
+    
+    /* Subtotal Fixed Label & Color */
+    .cart-table td:nth-of-type(4):before { 
+        content: "Subtotal:"; 
+        font-weight: bold; 
+        color: var(--text-muted); 
+    }
+    .cart-table td:nth-of-type(4) { 
+        color: var(--text-main) !important; /* Force black color */
+    }
+
+    .cart-item-info {
+        width: 100%;
+        border-bottom: 1px solid #f1f1f1;
+        padding-bottom: 10px !important;
+        margin-bottom: 10px;
+    }
+
+    .remove-btn {
+        width: 100%;
+        background: #fff5f5;
+        padding: 10px;
+        border-radius: 6px;
+        text-align: center;
+        margin-top: 5px;
+    }
+
+    .product-details-wrapper { grid-template-columns: 1fr; padding: 20px; }
+}
+
+/* --- 12. UTILS --- */
+.category-badge {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    border: 1px solid #e2e8f0;
+}

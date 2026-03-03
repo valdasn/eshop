@@ -7,6 +7,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -25,7 +26,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::share('allCategories', Category::all());
+        // 1. Run your default configurations
+        $this->configureDefaults();
+
+        // 2. Only share categories if we aren't running a command (like build or migrate)
+        // and only if the categories table actually exists in the database yet.
+        if (!app()->runningInConsole()) {
+            if (Schema::hasTable('categories')) {
+                View::share('allCategories', Category::all());
+            }
+        }
     }
 
     protected function configureDefaults(): void

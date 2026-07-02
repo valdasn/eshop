@@ -1,30 +1,45 @@
 @extends('layouts.app')
 
+@section('title', 'Account Settings')
+
 @section('content')
-<div class="container" style="padding: 40px 0;">
-    <h1 style="color: var(--dark-blue); margin-bottom: 30px;">Account Settings</h1>
+<div class="container main-content profile-edit-view">
+    
+    <div class="profile-header">
+        <h1>Account Settings</h1>
+        <p>Manage your personal information and security preferences.</p>
+    </div>
 
-    <div style="display: grid; grid-template-columns: 1fr; gap: 30px; max-width: 600px;">
+    <div class="settings-grid">
         
-        <div class="auth-container" style="margin: 0; max-width: 100%;">
-            <h3 style="margin-top: 0;">Profile Information</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Update your account's profile information and email address.</p>
-            
-            @include('profile.partials.update-profile-information-form')
+        <div class="settings-card">
+            <div class="card-intro">
+                <h3>Profile Information</h3>
+                <p>Update your name, email, and shipping details.</p>
+            </div>
+            <div class="form-wrapper">
+                @include('profile.partials.update-profile-information-form')
+            </div>
         </div>
 
-        <div class="auth-container" style="margin: 0; max-width: 100%;">
-            <h3 style="margin-top: 0;">Update Password</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Ensure your account is using a long, random password to stay secure.</p>
-            
-            @include('profile.partials.update-password-form')
+        <div class="settings-card">
+            <div class="card-intro">
+                <h3>Security</h3>
+                <p>Ensure your account is protected with a strong password.</p>
+            </div>
+            <div class="form-wrapper">
+                @include('profile.partials.update-password-form')
+            </div>
         </div>
 
-        <div class="auth-container" style="margin: 0; max-width: 100%; border-color: #feb2b2;">
-            <h3 style="margin-top: 0; color: #c53030;">Delete Account</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">Once your account is deleted, all of its resources and data will be permanently deleted.</p>
-            
-            @include('profile.partials.delete-user-form')
+        <div class="settings-card danger-card full-width">
+            <div class="card-intro">
+                <h3 class="text-red">Delete Account</h3>
+                <p>Permanently remove your account and all associated data.</p>
+            </div>
+            <div class="form-wrapper">
+                @include('profile.partials.delete-user-form')
+            </div>
         </div>
 
     </div>

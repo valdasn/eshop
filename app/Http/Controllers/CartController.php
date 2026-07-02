@@ -13,7 +13,7 @@ use Stripe\Checkout\Session;
 
 class CartController extends Controller
 {
-    // 1. Show the items currently in the cart
+    // Show current items in the cart
     public function index() 
     {
         $cart = session()->get('cart', []);
@@ -22,37 +22,42 @@ class CartController extends Controller
         return view('cart.index', compact('cart', 'total'));
     }
 
-    // 2. Add product (+1 increment)
     public function add(Request $request, $id) 
-    {
+{
+    if (is_numeric($id)) {
         $product = Product::findOrFail($id);
-        $cart = session()->get('cart', []);
-
-        if(isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-        } else {
-            $cart[$id] = [
-                "name" => $product->name,
-                "quantity" => 1,
-                "price" => $product->price,
-                "image" => $product->image
-            ];
-        }
-
-        session()->put('cart', $cart);
-
-        if ($request->ajax()) {
-            $totalQty = array_sum(array_column(session('cart', []), 'quantity'));
-            return response()->json([
-                'status' => 'success',
-                'cartCount' => $totalQty 
-            ]);
-        }
-
-        return redirect()->back()->with('success', 'Product added to cart!');
+    } else {
+        $product = Product::where('slug', $id)->firstOrFail();
     }
 
-    // 3. Update quantity (AJAX for Cart Page)
+    $actualId = $product->id;
+    $cart = session()->get('cart', []);
+
+    if(isset($cart[$actualId])) {
+        $cart[$actualId]['quantity']++;
+    } else {
+        $cart[$actualId] = [
+            "name" => $product->name,
+            "quantity" => 1,
+            "price" => $product->price,
+            "image" => $product->image
+        ];
+    }
+
+    session()->put('cart', $cart);
+
+    if ($request->ajax()) {
+        $totalQty = array_sum(array_column(session('cart', []), 'quantity'));
+        return response()->json([
+            'status' => 'success',
+            'cartCount' => $totalQty 
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Product added to cart!');
+}
+
+    // Update quantity
     public function update(Request $request)
     {
         if($request->id && $request->quantity) {
@@ -69,37 +74,51 @@ class CartController extends Controller
         }
     }
 
-    // 4. Remove item
-    public function remove($id) 
-    {
-        $cart = session()->get('cart');
-        if(isset($cart[$id])) {
-            unset($cart[$id]);
-            session()->put('cart', $cart);
-        }
+    // Remove item
+   public function remove($id)
+{
+    $cart = session()->get('cart');
 
-        // If cart is now empty, it's better to forget the session key entirely
+    if(isset($cart[$id])) {
+        unset($cart[$id]);
+        
         if (empty($cart)) {
             session()->forget('cart');
+            $cart = []; 
+        } else {
+            session()->put('cart', $cart);
         }
-
-        return redirect()->back()->with('success', 'Product removed successfully!');
     }
 
-    // NEW: 4b. Clear entire cart
+    $total = 0;
+    foreach($cart as $details) {
+        $total += $details['price'] * $details['quantity'];
+    }
+
+    if(request()->ajax()) {
+        return response()->json([
+            'status' => 'success',
+            'total' => number_format($total, 2),
+            'cartCount' => count($cart)
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Product removed successfully!');
+}
+
+    // Clear entire cart
     public function clear()
     {
         session()->forget('cart');
         return redirect()->route('cart.index')->with('success', 'Cart cleared!');
     }
 
-    // 5. Stripe Checkout Redirection
+    // Stripe Checkout Redirection
     public function stripeCheckout(Request $request)
     {
         $cart = session()->get('cart', []);
         if (empty($cart)) return redirect()->route('cart.index');
 
-        // SAVE SHIPPING INFO TO SESSION BEFORE REDIRECT
         session()->put('pending_order_data', $request->only(['phone', 'address', 'city', 'postal_code']));
 
         Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -127,7 +146,7 @@ class CartController extends Controller
         return redirect($checkoutSession->url);
     }
 
-    // 6. Stripe Success: Save Order with Shipping Details
+    // Stripe Success
     public function stripeSuccess()
     {
         $cart = session()->get('cart', []);
@@ -171,7 +190,7 @@ class CartController extends Controller
         }
     }
 
-    // 7. Show Checkout
+    // Show Checkout
     public function showCheckout() 
     {
         $cart = session()->get('cart', []);
@@ -183,7 +202,7 @@ class CartController extends Controller
         return view('checkout.index', compact('cart', 'total', 'user'));
     }
 
-    // 8. Order History
+    // Order History
     public function orderHistory()
     {
         $orders = Order::with('items.product')

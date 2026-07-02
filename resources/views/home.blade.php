@@ -11,76 +11,162 @@
         if ($currentLabel) {
             $headerTitle = $customH1Map[$currentLabel] ?? $currentLabel . ' Supplements';
         } else {
-            $headerTitle = 'Your Health, Simplified.';
+            $headerTitle = null;
         }
+
+        $displayProducts = $featuredProducts ?? $products ?? collect();
     @endphp
 
-    <div class="hero-banner">
-        <h1>{{ $headerTitle }}</h1>
-        <p>
-            @if($currentLabel == 'Shop All')
-                Browse our full range of premium health supplements.
-            @elseif($currentLabel)
-                Exploring our premium range of {{ strtolower($currentLabel) }} products.
-            @else
-                Premium quality supplements delivered to your door.
-            @endif
-        </p>
-    </div>
+@if(Request::is('/'))
+    <div class="hero-slider">
+        <a href="{{ route('products.index', ['promo' => 'sleep-sale']) }}" class="slide active">
+            <img src="{{ asset('storage/images/banners/sleep_banner.webp') }}" alt="Sleep Supplements">
+        </a>
 
-    <div class="category-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <h2 style="margin: 0;">{{ $headerTitle ?? 'Featured Products' }}</h2>
-            @if($currentLabel)
-                <a href="{{ route('home') }}" class="back-link" style="text-decoration: none; color: #666; font-size: 0.9rem;">← Back to Home</a>
-            @endif
+        <a href="{{ route('products.index', ['promo' => 'supercharge']) }}" class="slide">
+            <img src="{{ asset('storage/images/banners/activelifestyle_banner.webp') }}" alt="Active Lifestyle">
+            <div class="hero-content"></div>
+        </a>
+
+        <a href="{{ route('products.index', ['promo' => 'fish-oil']) }}" class="slide">
+            <img src="{{ asset('storage/images/banners/pills_banner.webp') }}" alt="Browse All Supplements">
+            <div class="hero-content"></div>
+        </a>
+
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlideShow(0)"></span>
+            <span class="dot" onclick="currentSlideShow(1)"></span>
+            <span class="dot" onclick="currentSlideShow(2)"></span>
+        </div>
+    </div>
+@endif
+
+@if($headerTitle)
+    <header class="category-header-section">
+        <h1 class="page-title">{{ $headerTitle }}</h1>
+    </header>
+@endif
+
+@if($currentLabel || isset($category))
+    <div class="category-header">
+        <div class="breadcrumb-wrapper">
+            <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                <ol class="breadcrumb-list">
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item">
+                        <span class="separator">/</span>
+                        <span class="current-page">{{ $currentLabel }}</span>
+                    </li>
+                </ol>
+            </nav>
         </div>
 
-        {{-- Only show sorting if we are in "Shop All" or a specific Category --}}
-        @if($currentLabel || isset($category))
-            <form id="sortForm" action="{{ url()->current() }}" method="GET" style="display: flex; align-items: center; gap: 10px;">
-                {{-- Keep 'all' parameter if we're in Shop All mode --}}
+        <div class="sort-wrapper">
+            <form id="sortForm" action="{{ url()->current() }}" method="GET" class="sort-form">
                 @if(request('all'))
                     <input type="hidden" name="all" value="true">
                 @endif
                 
-                <label for="sort" style="font-size: 0.9rem; color: #666; white-space: nowrap;">Sort by:</label>
-                <select name="sort" onchange="document.getElementById('sortForm').submit()" 
-                        style="padding: 8px 12px; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; background-color: white; font-size: 0.9rem; outline: none; border-color: var(--primary-green);">
+                <label for="sort" class="sort-label">Sort by:</label>
+                <select name="sort" onchange="this.form.submit()" class="sort-dropdown">
                     <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest Arrivals</option>
                     <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                     <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
                 </select>
             </form>
-        @endif
+        </div>
     </div>
+@endif
 
-    <div class="product-grid"> 
-        @foreach($products as $product)
+    @if(Request::is('/') && isset($featuredProducts))
+        <h2 class="homepage-section-title">Featured Products</h2>
+    @endif
+
+    <div class="product-grid">
+        @foreach($displayProducts as $product)
             <div class="product-card">
-                <a href="{{ route('products.show', $product->id) }}">
-                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
+                <a href="{{ route('products.show', ['product' => $product->slug]) }}" class="product-card-link">
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                    <h3 class="product-title">{{ $product->name }}</h3>
+                    <div class="product-price-container">
+                    @if($product->original_price)
+                        <span class="old-price">${{ number_format($product->original_price, 2) }}</span>
+                        <span class="product-price sale-price">${{ number_format($product->price, 2) }}</span>
+                    @else
+                        <span class="product-price">${{ number_format($product->price, 2) }}</span>
+                    @endif
+                    </div>
                 </a>
-                
-                <h3>{{ $product->name }}</h3>
-                <p class="price">${{ number_format($product->price, 2) }}</p>
-                
-                <div class="card-actions">
-                    <a href="{{ route('products.show', $product->id) }}" class="btn-outline">View Details</a>
 
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="ajax-cart-form">
-                     @csrf
-                    <button type="submit" class="btn" style="max-width: 300px;">Add to Cart</button>
-                    </form>
-                </div>
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="ajax-cart-form">
+                    @csrf
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form>
             </div>
         @endforeach
     </div>
 
-    @if($products->isEmpty())
-        <div class="empty-state" style="text-align: center; padding: 60px 20px; background: #f9f9f9; border-radius: 12px; margin-top: 20px;">
-            <p style="color: #666; margin-bottom: 20px;">No products found matching these criteria.</p>
-            <a href="{{ route('home') }}" class="btn" style="padding: 10px 30px;">Back to Home</a>
+    @if(Request::is('/') && isset($saleProducts) && $saleProducts->isNotEmpty())
+        <h2 class="homepage-section-title--offers">Special Offers</h2>
+        <div class="product-grid">
+            @foreach($saleProducts as $product)
+                <div class="product-card">
+                    <span class="sale-badge">SALE</span>
+                    <a href="{{ route('products.show', ['product' => $product->slug]) }}" class="product-card-link">
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                        <h3 class="product-title">{{ $product->name }}</h3>
+                        <div class="product-price-container">
+                            <span class="old-price">${{ number_format($product->original_price, 2) }}</span>
+                            <span class="product-price sale-price">${{ number_format($product->price, 2) }}</span>
+                        </div>
+                    </a>
+                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="ajax-cart-form">
+                        @csrf
+                        <button type="submit" class="btn">Add to Cart</button>
+                    </form>
+                </div>
+            @endforeach
         </div>
     @endif
+
+    @if($displayProducts->isEmpty() && (!isset($saleProducts) || $saleProducts->isEmpty()))
+        <div class="empty-state-container">
+            <p>No products found matching these criteria.</p>
+            <a href="{{ route('home') }}" class="btn btn-auto">Back Home</a>
+        </div>
+    @endif
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        let slideTimer;
+
+        function showSlide(index) {
+            if(!slides.length) return;
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => d.classList.remove('active'));
+            currentSlide = index;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            resetTimer();
+        }
+        function nextSlide() {
+            if(!slides.length) return;
+            let next = (currentSlide + 1) % slides.length;
+            showSlide(next);
+        }
+        function resetTimer() {
+            clearInterval(slideTimer);
+            if(slides.length) {
+                slideTimer = setInterval(nextSlide, 4000);
+            }
+        }
+        window.currentSlideShow = function(index) {
+            showSlide(index);
+        };
+        resetTimer();
+    });
+    </script>
 @endsection

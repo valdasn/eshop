@@ -1,0 +1,1 @@
+import{q as s}from"./AppLogoIcon.vue_vue_type_script_setup_true_lang-liUrg3w5.js";const r=o=>({url:r.url(o),method:"post"});r.definition={methods:["post"],url:"/user/confirm-password"};r.url=o=>r.definition.url+s(o);r.post=o=>({url:r.url(o),method:"post"});const e={store:Object.assign(r,r)};export{e as c,r as s};

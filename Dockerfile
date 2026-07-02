@@ -9,8 +9,8 @@ COPY --chown=www-data:www-data . .
 # Install production dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Run frontend build natively
-RUN apk add --no-cache nodejs npm && npm install && npm run build
+# FIX: Give the web server permission to read the vendor packages
+RUN chown -R www-data:www-data /var/www/html/vendor
 
 # Set the web root to Laravel's public directory
 ENV AUTORUN_ENABLED=true

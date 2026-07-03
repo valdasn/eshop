@@ -18,7 +18,7 @@
             @endif
 
             <label for="sort" class="sort-label">Sort by:</label>
-            <select name="sort" onchange="document.getElementById('sortForm').submit()" class="sort-dropdown">
+            <select id="sort" name="sort" onchange="document.getElementById('sortForm').submit()" class="sort-dropdown">
                 <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest Arrivals</option>
                 <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
                 <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>

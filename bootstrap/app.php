@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // Tell Laravel to trust Render's load balancers for HTTPS routing
         $middleware->trustProxies(at: '*');
 
+        // Force secure CSP headers that allow Vue's runtime compilation
+        $middleware->respondWithHeaders([
+            'Content-Security-Policy' => "upgrade-insecure-requests; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';",
+        ]);
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [

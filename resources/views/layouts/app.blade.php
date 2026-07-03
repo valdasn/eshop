@@ -17,7 +17,7 @@
     <div class="container nav-container">
         <a href="{{ route('home') }}" class="logo">VitaShop</a>
 
-       <form action="{{ route('products.index') }}" method="GET" class="nav-search-form">
+       <form action="{{ secure_url(route('products.index', [], false)) }}" method="GET" class="nav-search-form">
         <div class="search-input-wrapper">
         <input type="text" name="search" placeholder="Search products..." value="{{ request('search') }}">
         <button type="submit" class="btn-search-icon">

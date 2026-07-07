@@ -58,8 +58,8 @@ return [
     'prefix_indexes' => true,
     'strict' => true,
     'engine' => null,
-    'options' => env('MYSQL_ATTR_SSL_CA') ? [
-    \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+    'options' => (extension_loaded('pdo_mysql') && env('APP_ENV') !== 'local') ? [
+    \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', '/etc/ssl/certs/ca-certificates.crt'),
 ] : [],
 ],
 

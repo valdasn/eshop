@@ -58,7 +58,7 @@ return [
     'prefix_indexes' => true,
     'strict' => true,
     'engine' => null,
-    'options' => (defined('PDO::MYSQL_ATTR_SSL_CA') && env('MYSQL_ATTR_SSL_CA')) ? [
+    'options' => env('MYSQL_ATTR_SSL_CA') ? [
     \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
 ] : [],
 ],

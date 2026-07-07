@@ -32,8 +32,12 @@ class AppServiceProvider extends ServiceProvider
         // 2. Only share categories if we aren't running a command (like build or migrate)
         // and only if the categories table actually exists in the database yet.
         if (!app()->runningInConsole()) {
-            if (Schema::hasTable('categories')) {
-                View::share('allCategories', Category::all());
+            try {
+                if (Schema::hasTable('categories')) {
+                    View::share('allCategories', Category::all());
+                }
+            } catch (\Throwable $e) {
+                View::share('allCategories', collect());
             }
         }
     }

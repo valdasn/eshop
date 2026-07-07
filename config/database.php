@@ -44,25 +44,29 @@ return [
         ],
 
         'mysql' => [
-    'driver' => 'mysql',
-    'url' => env('DB_URL'),
-    'host' => env('DB_HOST', '127.0.0.1'),
-    'port' => env('DB_PORT', '3306'),
-    'database' => env('DB_DATABASE', 'laravel'),
-    'username' => env('DB_USERNAME', 'root'),
-    'password' => env('DB_PASSWORD', ''),
-    'unix_socket' => env('DB_SOCKET', ''),
-    'charset' => env('DB_CHARSET', 'utf8mb4'),
-    'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
-    'prefix' => '',
-    'prefix_indexes' => true,
-    'strict' => true,
-    'engine' => null,
-    'options' => extension_loaded('pdo_mysql') ? [
-     \PDO::MYSQL_ATTR_SSL_CA => true,
-    \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
-] : [],
-],
+            'driver' => 'mysql',
+            'url' => env('DB_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => env('DB_DATABASE', 'laravel'),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => env('DB_CHARSET', 'utf8mb4'),
+            'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') && (
+                filter_var(env('DB_SSL', false), FILTER_VALIDATE_BOOLEAN)
+                || env('DB_SSLMODE') === 'require'
+                || str_contains((string) env('DB_HOST', ''), 'aiven')
+            ) ? [
+                \PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA', '/etc/ssl/certs/ca-certificates.crt'),
+                \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => filter_var(env('MYSQL_ATTR_SSL_VERIFY_SERVER_CERT', false), FILTER_VALIDATE_BOOLEAN),
+            ] : [],
+        ],
 
         'mariadb' => [
             'driver' => 'mariadb',

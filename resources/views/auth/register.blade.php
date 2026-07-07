@@ -23,7 +23,7 @@
 
             <div class="form-group">
                 <label for="password">Password</label>
-                <input id="password" type="password" name="password" required placeholder="Min. 8 characters">
+                <input id="password" type="password" name="password" required placeholder="Min. 12 characters">
                 @error('password') <span class="error-msg">{{ $message }}</span> @enderror
             </div>
 

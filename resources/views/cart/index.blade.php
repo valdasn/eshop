@@ -27,10 +27,13 @@
                                         <img src="{{ asset('storage/' . $details['image']) }}" 
                                              class="cart-product-img" 
                                              alt="{{ $details['name'] }}">
-                                        <span class="cart-item-name">{{ $details['name'] }}</span>
+                                        <div class="cart-item-meta">
+                                            <span class="cart-item-name">{{ $details['name'] }}</span>
+                                            <span class="cart-item-price-mobile">${{ number_format($details['price'], 2) }}</span>
+                                        </div>
                                     </div>
                                 </td>
-                                <td>${{ number_format($details['price'], 2) }}</td>
+                                <td class="cart-price-cell">${{ number_format($details['price'], 2) }}</td>
                                 <td>
                                     <div class="quantity-controls">
                                         <button class="qty-btn minus">-</button>

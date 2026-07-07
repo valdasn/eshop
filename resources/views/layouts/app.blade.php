@@ -106,6 +106,41 @@
     @endif
 </main>
 
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="{{ route('home') }}" class="logo footer-logo">VitaShop</a>
+                <p>Your trusted source for vitamins, supplements, and wellness essentials.</p>
+            </div>
+
+            <div>
+                <h3 class="footer-title">Quick links</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li><a href="{{ route('products.index', ['all' => 'true']) }}">Shop all</a></li>
+                    <li><a href="{{ route('cart.index') }}">Cart</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="footer-title">Support</h3>
+                <ul class="footer-links">
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ route('register') }}">Create account</a></li>
+                    <li><a href="{{ route('orders.history') }}">My orders</a></li>
+                    <li><a href="{{ route('contact.show') }}">Contact us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© {{ date('Y') }} VitaShop. All rights reserved.</span>
+            <span>Made with care for your wellness journey.</span>
+        </div>
+    </div>
+</footer>
+
 <script>
     document.querySelectorAll('.ajax-cart-form').forEach(form => {
         form.addEventListener('submit', function(e) {

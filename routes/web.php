@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Route;
 /* Public Routes */
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/shop-all', [ProductController::class, 'index'])->name('products.index');
+Route::get('/contact', [App\Http\Controllers\ContactController::class, 'show'])->name('contact.show');
+Route::post('/contact', [App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
 
 
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('products.show');

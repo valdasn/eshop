@@ -85,6 +85,9 @@
     <div class="product-grid">
         @foreach($displayProducts as $product)
             <div class="product-card">
+                @if($product->original_price)
+                    <span class="sale-badge">SALE</span>
+                @endif
                 <a href="{{ route('products.show', ['product' => $product->slug]) }}" class="product-card-link">
                     <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
                     <h3 class="product-title">{{ $product->name }}</h3>

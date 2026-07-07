@@ -21,5 +21,14 @@
                 {{ $slot }}
             </div>
         </div>
+
+        <footer class="site-footer site-footer-auth">
+            <div class="container">
+                <div class="footer-bottom">
+                    <span>© {{ date('Y') }} VitaShop. All rights reserved.</span>
+                    <span>Made with care for your wellness journey.</span>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
